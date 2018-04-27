@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>Particles</title>
+<script>
+  var canvas;
+  var context;
+  var particles;
+  var timer;
+  var timer2;
+  var gravity;
+  gravity = 2.5;
+  function degreesToRadians(degrees){
+    return (degrees * Math.PI)/180;
+  }
+
+  function makeParticles(){
+    particles = [];
+    for(var i=0; i < 30; i++)
+      {
+        particles.push(new Particles());
+      }
+  }
+
+  function moveParticles(){
+    context.globalCompositeOperation = 'source-over';
+    context.fillStyle = 'rgba(0,0,0,0.3)';
+    context.fillRect(0,0,canvas.width,canvas.height);
+    context.globalCompositeOperation = 'lighter';
+    for (var i=0; i < particles.length; i++){
+      //Draw the particle
+      var p = particles[i];
+      context.beginPath();
+      context.arc(p.x,p.y,p.radius,0,degreesToRadians(360),true);
+      context.fillStyle = p.color;
+      context.fill();
+
+      //Move the Particle
+      p.x += p.vx;
+      p.y += p.vy + gravity;
+
+      if (p.x < -50){p.x = canvas.width+50}
+      if (p.y < -50){p.y = canvas.height+50}
+      if (p.x > canvas.width + 50){p.x = -50}
+      if (p.y > canvas.height + 50){p.y = -50}
+      if (p.radius > 0)
+        {
+          p.radius = p.radius * 0.95;
+        }
+
+    }
+    //Move the Particle
+    p.x += p.vx;
+    p.y += p.vy;
+
+    if (p.x < -50){p.x = canvas.width+50}
+    if (p.y < -50){p.y = canvas.height+50}
+    if (p.x > canvas.width + 50){p.x = -50}
+    if (p.y > canvas.height + 50){p.y = -50}
+  }
+  function Particles(){
+    this.x = canvas.width/2;
+    this.y = canvas.height/2;
+    this.vx = Math.random() * 10 - 5;
+    this.vy = Math.random() * 10 - 5;
+
+    var colors = ['red','blue','yellow','green','orange','purple']
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+    this.radius = 15;
+  }
+  window.onload = function() {
+    canvas = document.getElementById('canvas');
+    context = canvas.getContext('2d');
+    makeParticles();
+    timer2 = setInterval(makeParticles,4500);
+    timer = setInterval(moveParticles, 100);
+    //Make particles
+
+    //Move Particles
+  }
+</script>
+</head>
+<body>
+  <canvas id="canvas" width="500" height="400"></canvas>
+</body>
+</html>
